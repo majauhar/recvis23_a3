@@ -106,6 +106,7 @@ def train(
     """
     model.train()
     correct = 0
+    total_loss = 0
     for batch_idx, (data, target) in enumerate(train_loader):
         if use_cuda:
             data, target = data.cuda(), target.cuda()
@@ -117,6 +118,7 @@ def train(
         optimizer.step()
         pred = output.data.max(1, keepdim=True)[1]
         correct += pred.eq(target.data.view_as(pred)).cpu().sum()
+        total_loss += loss.data.item()
         if batch_idx % args.log_interval == 0:
             print(
                 "Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}".format(
@@ -134,6 +136,7 @@ def train(
             100.0 * correct / len(train_loader.dataset),
         )
     )
+    wandb.log({"train loss": total_loss / len(train_loader.dataset), "train_acc": 100.0 * correct / len(train_loader.dataset)})
 
 
 def validation(
@@ -174,6 +177,7 @@ def validation(
             100.0 * correct / len(val_loader.dataset),
         )
     )
+    wandb.log({"val loss": validation_loss, "val_acc": 100.0 * correct / len(val_loader.dataset)})
     return validation_loss
 
 
@@ -188,9 +192,9 @@ def main():
     
     # track hyperparameters and run metadata
     config={
-    "learning_rate": 0.02,
+    "learning_rate": args.lr,
     "architecture": args.model_name,
-    "dataset": "Animation",
+    "dataset": args.data,
     "epochs": args.epochs,
     }
     )
@@ -237,7 +241,6 @@ def main():
         train(model, optimizer, train_loader, use_cuda, epoch, args)
         # validation loop
         val_loss = validation(model, val_loader, use_cuda)
-        wandb.log({"loss": val_loss})
         if val_loss < best_val_loss:
             # save the best model for validation
             best_val_loss = val_loss
