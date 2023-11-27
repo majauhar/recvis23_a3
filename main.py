@@ -191,7 +191,7 @@ def main():
     "learning_rate": 0.02,
     "architecture": args.model_name,
     "dataset": "Animation",
-    "epochs": args.epoch,
+    "epochs": args.epochs,
     }
     )
 
