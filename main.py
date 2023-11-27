@@ -7,6 +7,8 @@ import torch.optim as optim
 from torch.autograd import Variable
 from torchvision import datasets
 from tqdm import tqdm
+import wandb
+import random
 
 from model_factory import ModelFactory
 
@@ -180,6 +182,19 @@ def main():
     # options
     args = opts()
 
+    wandb.init(
+    # set the wandb project where this run will be logged
+    project="catch-me",
+    
+    # track hyperparameters and run metadata
+    config={
+    "learning_rate": 0.02,
+    "architecture": args.model_name,
+    "dataset": "Animation",
+    "epochs": args.epoch,
+    }
+    )
+
     # Check if cuda is available
     use_cuda = torch.cuda.is_available()
 
@@ -222,6 +237,7 @@ def main():
         train(model, optimizer, train_loader, use_cuda, epoch, args)
         # validation loop
         val_loss = validation(model, val_loader, use_cuda)
+        wandb.log({"loss": val_loss})
         if val_loss < best_val_loss:
             # save the best model for validation
             best_val_loss = val_loss
