@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from torchvision.models import resnet50, ResNet50_Weights
+from torchvision.models import resnet50, ResNet50_Weights, vit_h_14, ViT_H_14_Weights
 
 nclasses = 250
 
@@ -29,6 +29,16 @@ class ResNet50(nn.Module):
         self.pretrained = resnet50(weights=ResNet50_Weights.DEFAULT)
         self.fc = nn.Linear(1000, nclasses)
     
+    def forward(self, x):
+        x = F.relu(self.pretrained(x))
+        return self.fc(x)
+
+class ViTh14(nn.Module):
+    def __init__(self):
+        super(ViTh14, self).__init__()
+        self.pretrained = vit_h_14(ViT_H_14_Weights.DEFAULT)
+        self.fc = nn.Linear(1000, nclasses)
+
     def forward(self, x):
         x = F.relu(self.pretrained(x))
         return self.fc(x)

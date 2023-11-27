@@ -20,3 +20,12 @@ data_transforms_r50 = transforms.Compose([
         std=[0.229, 0.224, 0.225]
     )
 ])
+
+data_transforms_vith14 = transforms.Compose([
+    transforms.Resize((518, 518)),
+    transforms.ToTensor(),
+    transforms.Normalize(
+        mean=[0.485, 0.456, 0.406],
+        std=[0.229, 0.224, 0.225]
+    )
+])

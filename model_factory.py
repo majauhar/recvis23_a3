@@ -1,6 +1,6 @@
 """Python file to instantite the model and the transform that goes with it."""
-from model import Net, ResNet50
-from data import data_transforms, data_transforms_r50
+from model import Net, ResNet50, ViTh14
+from data import data_transforms, data_transforms_r50, data_transforms_vith14
 
 
 class ModelFactory:
@@ -14,6 +14,8 @@ class ModelFactory:
             return Net()
         elif self.model_name == "resnet_pretrained":
             return ResNet50()
+        elif self.model_name == "vit_h_14":
+            return ViTh14()
         else:
             raise NotImplementedError("Model not implemented")
 
@@ -22,6 +24,8 @@ class ModelFactory:
             return data_transforms
         elif self.model_name == "resnet_pretrained":
             return data_transforms_r50
+        elif self.model_name == "vit_h_14":
+            return data_transforms_vith14
         else:
             raise NotImplementedError("Transform not implemented")
 
