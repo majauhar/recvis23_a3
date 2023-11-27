@@ -230,6 +230,10 @@ def main():
         shuffle=False,
         num_workers=args.num_workers,
     )
+    # Dataset statistics
+    # print("length of trainloader: ", len(train_loader), "\nlength of val_loader: ", len(val_loader))
+    # _, (image, label) = next(enumerate(train_loader))
+    # print(image.shape, label.shape)
 
     # Setup optimizer
     optimizer = optim.SGD(model.parameters(), lr=args.lr, momentum=args.momentum)
