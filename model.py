@@ -1,6 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+from torchvision.models import resnet50, ResNet50_Weights
 
 nclasses = 250
 
@@ -21,3 +22,13 @@ class Net(nn.Module):
         x = x.view(-1, 320)
         x = F.relu(self.fc1(x))
         return self.fc2(x)
+
+class ResNet50(nn.Module):
+    def __init__(self):
+        super(ResNet50, self).__init__()
+        self.pretrained = resnet50(weights=ResNet50_Weights.DEFAULT)
+        self.fc = nn.Linear(1000, nclasses)
+    
+    def forward(self, x):
+        x = F.relu(self.pretrained(x))
+        return self.fc(x)
