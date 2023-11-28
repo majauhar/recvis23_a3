@@ -21,7 +21,7 @@ class ModelFactory:
         elif self.model_name == "vit_b_16":
             return ViTb16()
         elif self.model_name == "efficient_net":
-            return EfficientNet
+            return EfficientNet()
         else:
             raise NotImplementedError("Model not implemented")
 
@@ -36,7 +36,7 @@ class ModelFactory:
             return data_transforms_vitl16
         elif self.model_name == "vit_b_16":
             return data_transforms_vitb16
-        elif self.model_name == "efficient_name":
+        elif self.model_name == "efficient_net":
             return data_transforms_r50
         else:
             raise NotImplementedError("Transform not implemented")
