@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from torchvision.models import resnet50, ResNet50_Weights, vit_h_14, ViT_H_14_Weights, vit_l_16, ViT_L_16_Weights, vit_b_16, ViT_B_16_Weights
+from torchvision.models import resnet50, ResNet50_Weights, vit_h_14, ViT_H_14_Weights, vit_l_16, ViT_L_16_Weights, vit_b_16, ViT_B_16_Weights, efficientnet_v2_s, EfficientNet_V2_S_Weights
 
 nclasses = 250
 
@@ -57,6 +57,16 @@ class ViTb16(nn.Module):
     def __init__(self):
         super(ViTb16, self).__init__()
         self.pretrained = vit_b_16(ViT_B_16_Weights.IMAGENET1K_SWAG_E2E_V1)
+        self.fc = nn.Linear(1000, nclasses)
+
+    def forward(self, x):
+        x = F.relu(self.pretrained(x))
+        return self.fc(x)
+
+class EfficientNet(nn.Module):
+    def __init__(self):
+        super(EfficientNet, self).__init__()
+        self.pretrained = efficientnet_v2_s(EfficientNet_V2_S_Weights.IMAGENET1K_V1)
         self.fc = nn.Linear(1000, nclasses)
 
     def forward(self, x):
